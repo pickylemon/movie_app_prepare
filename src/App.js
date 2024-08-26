@@ -27,7 +27,7 @@ export default class App extends Component {
             <h1>Fruits</h1>
             <ul>
                 ${this.state.fruits
-                        .filter(fruit => fruit < 3000)
+                        .filter(fruit => fruit.price < 3000)
                         .map(fruit => `<li>${fruit.name}</li>`)
                         .join('')}
             </ul>
