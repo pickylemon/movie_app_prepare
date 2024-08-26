@@ -21,3 +21,46 @@ export class Component {
         // Component 클래스를 extends해서 사용할때만 쓰임
     }
 }
+
+
+//// Router ////
+function routeRender(routes) {
+    if(!location.hash) { //주소에 해시가 없으면
+        history.replaceState(null, '', '/#/') //history내역에 기록을 남기지 않으며 대체
+    }
+
+    const routerView = document.querySelector('router-view')
+    const [ hash, queryString = '' ] = location.hash.split('?') //해시와 쿼리스트링을 나누어 담는다.(split + 배열 구조 분해 할당)
+    
+    // a=123&b=456
+    // ['a=123', 'b=456']
+    // { a: '123', b: '456' }
+    // 쿼리 스트링을 객체로 가공해서 state에 저장
+    const query = queryString
+        .split('&')
+        .reduce((acc, cur)=>{
+            const [ key, value ] = cur.split('=')
+            acc[key] = value
+            return acc
+        }, {})
+    history.replaceState(query, '')
+
+    const currentRoute 
+        = routes.find(route => 
+                        // /#\/about\/?$/.test(hash)
+                        new RegExp(`${route.path}/?$`).test(hash)
+    )
+    routerView.innerHTML = ''
+    routerView.append(new currentRoute.component().el)
+
+    window.scrollTo(0, 0) //페이지 위치를 최상단으로 바꿔줌(페이지 전환처럼 눈속임)
+}
+
+export function createRouter(routes) {
+    return function () {
+        window.addEventListener('popstate', () => {
+            routeRender(routes)
+        })
+        routeRender(routes) //popstate는 처음에는 직접 동작하지 않기때문에 최초 호출 필요
+    }
+}
