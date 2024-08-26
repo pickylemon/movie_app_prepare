@@ -11,27 +11,26 @@ export default class App extends Component {
     constructor() {
         super({
             state: {
-                inputText: ''
+                fruits: [
+                    { name: 'Apple', price: 1000 },
+                    { name: 'Banana', price: 2000 },
+                    { name: 'Cherry', price: 3000 }
+                ]
             }
         })
     }
 
-    //선언적 렌더링 : 사용할 데이터를 선언해서(ex. state의 inputText) 렌더링하는 것.
     render() {
-        this.el.classList.add('search') //클래스 이름 추가
-        this.el.innerHTML = /* html */`
-            <input>
-            <button>Click!</button>
-        `
-
-        const inputEl = this.el.querySelector('input')
-        inputEl.addEventListener('input', () => {
-            this.state.inputText = inputEl.value
-        })
-
-        const buttonEl = this.el.querySelector('button')
-        buttonEl.addEventListener('click', () => {
-            console.log(this.state.inputText)
-        })
+        console.log(this.state.fruits)
+        
+        this.el.innerHTML = /* HTML */ `
+            <h1>Fruits</h1>
+            <ul>
+                ${this.state.fruits
+                        .filter(fruit => fruit < 3000)
+                        .map(fruit => `<li>${fruit.name}</li>`)
+                        .join('')}
+            </ul>
+            `
     }
 }
