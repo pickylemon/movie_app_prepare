@@ -64,3 +64,24 @@ export function createRouter(routes) {
         routeRender(routes) //popstate는 처음에는 직접 동작하지 않기때문에 최초 호출 필요
     }
 }
+
+//// Store ////
+export class Store {
+    constructor(state) {
+        this.state = {}
+        this.observers = {}
+        for(const key in state) {
+            Object.defineProperty(this.state, key, {
+                get: () => state[key], // state['message']
+                set: val => {
+                    console.log(val)
+                    state[key] = val
+                    this.observers[key]()
+                }
+            })
+        } 
+    }
+    subscribe(key, cb) { //변경된 데이터를 감지하고 감시하는 메소드
+        this.observers[key] = cb
+    }
+}
