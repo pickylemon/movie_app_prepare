@@ -76,12 +76,23 @@ export class Store {
                 set: val => {
                     console.log(val)
                     state[key] = val
-                    this.observers[key]()
+                    //this.observers['message']()
+                    //메세지를 수정하게 되면 메세지가 등록되어 있는 함수를 호출
+                    this.observers[key].forEach(observer => observer(val))
                 }
             })
         } 
     }
     subscribe(key, cb) { //변경된 데이터를 감지하고 감시하는 메소드
-        this.observers[key] = cb
+        // this.observers['message'] = () => {}
+        // { message: () => {} } 하나의 함수만 할당되는 형태에서
+        // this.observers[key] = cb
+
+        // { message: [() => {}, () => {}, () => {}]} 배열형태로 수정
+        Array.isArray(this.observers[key])
+            ? this.observers[key].push(cb)
+            : this.observers[key] = [cb] //최초 배열 데이터 할당
+
+        
     }
 }
