@@ -1,6 +1,7 @@
 import { Component } from '../core/core.js'
 import TextField from '../components/TextField.js'
 import Message from '../components/Message.js'
+import Title from '../components/Title.js'
 
 export default class Home extends Component {
     render() {
@@ -9,7 +10,8 @@ export default class Home extends Component {
         `
         this.el.append(
             new TextField().el,
-            new Message().el
+            new Message().el,
+            new Title().el
         )
     }
 }
